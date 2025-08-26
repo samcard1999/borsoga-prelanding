@@ -15,7 +15,7 @@ body {
   place-items: center;
   min-width: 320px;
   width: 100vw;
-  min-height: 100vh;
+  height: 100dvh;
   font-family: "Poppins", sans-serif;
   background-color: #000000;
   color: #ffffff;

@@ -3,7 +3,7 @@ import React from "react";
 const Footer = () => {
   return (
     <footer className="flex flex-col  h-auto  items-start w-full">
-      <div className="border-t border-white  flex justify-between items-end w-full py-2">
+      <div className="border-t border-white  flex   justify-between items-end w-full py-2">
         <span className="text-2xl leading-6">
           <h2 className="font-thin">Contact</h2>
           <h2 className="font-semibold">Now</h2>

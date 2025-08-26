@@ -1,5 +1,5 @@
 import Cover from "./components/Cover";
-import "./app.css";
+import "./App.css";
 
 function App() {
   return (

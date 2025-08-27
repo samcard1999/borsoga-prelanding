@@ -5,47 +5,59 @@ import "swiper/css";
 import "swiper/css/effect-coverflow";
 
 const slides = [
+  // {
+  //   id: 1,
+  //   title: "",
+  //   subtitle: "",
+  //   image: "assets/shape.svg",
+  // },
   {
-    id: 1,
+    id: 2,
     title: "Residence 1",
     subtitle: "Visualization",
     image: "assets/carousel/1.webp",
   },
   {
-    id: 2,
+    id: 3,
     title: "Residence 2",
     subtitle: "Visualization",
     image: "assets/carousel/2.webp",
   },
   {
-    id: 3,
+    id: 4,
     title: "Residence 3",
     subtitle: "Visualization",
     image: "assets/carousel/4.webp",
   },
   {
-    id: 4,
+    id: 5,
     title: "Residence 4",
     subtitle: "Visualization",
     image: "assets/carousel/3.webp",
   },
   {
-    id: 5,
+    id: 6,
     title: "Residence 5",
     subtitle: "Visualization",
     image: "assets/carousel/5.webp",
   },
   {
-    id: 6,
+    id: 7,
     title: "Epsi Nest",
     subtitle: "Web Design",
     image: "assets/carousel/7.webp",
   },
   {
-    id: 7,
+    id: 8,
     title: "Peak Vision",
     subtitle: "Visual Identity",
     image: "assets/carousel/6.webp",
+  },
+  {
+    id: 9,
+    title: "",
+    subtitle: "",
+    image: "assets/shape.svg",
   },
 ];
 
@@ -98,12 +110,12 @@ const BlurBackgroundCarousel = () => {
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-500 ease-in-out`}
+            className={`absolute inset-0 transition-opacity transition-all duration-500 ease-in-out`}
             style={{
               backgroundImage: `url(${slide.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
-              filter: "blur(20px) brightness(0.4)",
+              filter: "blur(35px) brightness(0.4)",
               opacity: activeIndex === index ? 1 : 0,
             }}
           ></div>
@@ -125,7 +137,7 @@ const BlurBackgroundCarousel = () => {
           slideShadows: false,
         }}
         onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
-        className="h-full w-full"
+        className="mySwiper h-full w-full"
       >
         {slides.map((slide) => (
           <SwiperSlide

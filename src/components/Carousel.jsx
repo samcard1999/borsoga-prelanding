@@ -37,14 +37,14 @@ const slides = [
   },
   {
     id: 6,
-    title: "Creative Design",
-    subtitle: "Programming",
+    title: "Epsi Nest",
+    subtitle: "Web Design",
     image: "assets/carousel/7.webp",
   },
   {
     id: 7,
-    title: "Future Vision",
-    subtitle: "Graphic Design",
+    title: "Peak Vision",
+    subtitle: "Visual Identity",
     image: "assets/carousel/6.webp",
   },
 ];

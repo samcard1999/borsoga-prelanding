@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-coverflow";
+import placeholders from "../../placeholders.json";
 
 const slides = [
   // {
@@ -16,42 +17,49 @@ const slides = [
     title: "Residence 1",
     subtitle: "Visualization",
     image: "assets/carousel/1.webp",
+    placeholder: placeholders["1.webp"].base64,
   },
   {
     id: 3,
     title: "Residence 2",
     subtitle: "Visualization",
     image: "assets/carousel/2.webp",
+    placeholder: placeholders["2.webp"].base64,
   },
   {
     id: 4,
     title: "Residence 3",
     subtitle: "Visualization",
     image: "assets/carousel/4.webp",
+    placeholder: placeholders["3.webp"].base64,
   },
   {
     id: 5,
     title: "Residence 4",
     subtitle: "Visualization",
     image: "assets/carousel/3.webp",
+    placeholder: placeholders["4.webp"].base64,
   },
   {
     id: 6,
     title: "Residence 5",
     subtitle: "Visualization",
     image: "assets/carousel/5.webp",
+    placeholder: placeholders["5.webp"].base64,
   },
   {
     id: 7,
     title: "Epsi Nest",
     subtitle: "Web Design",
     image: "assets/carousel/7.webp",
+    placeholder: placeholders["7.webp"].base64,
   },
   {
     id: 8,
     title: "Peak Vision",
     subtitle: "Visual Identity",
     image: "assets/carousel/6.webp",
+    placeholder: placeholders["6.webp"].base64,
   },
   {
     id: 9,
@@ -62,31 +70,47 @@ const slides = [
 ];
 
 const SlideItem = ({ slide }) => {
-  const [isLandscape, setIsLandscape] = React.useState(true);
+  const [isLandscape, setIsLandscape] = useState(true);
+  const [loaded, setLoaded] = useState(false);
 
   return (
     <div
       className={`grid w-full min-h-0 ${
         isLandscape
           ? "grid-rows-[auto_auto] h-auto"
-          : "grid-rows-[1fr_auto]  h-full"
+          : "grid-rows-[1fr_auto] h-full"
       }`}
     >
       {/* Zona imagen */}
       <div
-        className={`w-full overflow-hidden flex items-center justify-center ${
+        className={`relative w-full overflow-hidden flex items-center justify-center ${
           isLandscape ? "h-auto" : "h-full min-h-0"
         }`}
       >
+        {/* Placeholder blur-up */}
+        {slide.placeholder && (
+          <img
+            src={slide.placeholder}
+            alt=""
+            aria-hidden="true"
+            className={`absolute inset-0 w-full h-full object-contain blur-xl scale-105 transition-opacity duration-500 ${
+              loaded ? "opacity-0" : "opacity-100"
+            }`}
+          />
+        )}
+
+        {/* Imagen real */}
         <img
           src={slide.image}
           alt={slide.title}
-          className="object-contain max-w-full max-h-full "
+          className={`object-contain max-w-full max-h-full transition-opacity duration-500 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
           onLoad={(e) => {
             setIsLandscape(
               e.currentTarget.naturalWidth >= e.currentTarget.naturalHeight
             );
-            console.log(isLandscape);
+            setLoaded(true);
           }}
         />
       </div>

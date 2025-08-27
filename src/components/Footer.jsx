@@ -12,7 +12,9 @@ const Footer = () => {
       </div>
       <div className="flex justify-between w-full border-t border-b border-white py-1">
         <h2 className="font-semibold">Based in Miami</h2>
-        <h2 className="font-light">Our site is coming soon</h2>
+        <h2 className="font-light">
+          Our site is <span className="italic font-semibold">coming soon!</span>
+        </h2>
       </div>
     </footer>
   );

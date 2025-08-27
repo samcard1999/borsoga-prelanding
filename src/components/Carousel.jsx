@@ -74,48 +74,33 @@ const SlideItem = ({ slide }) => {
   const [loaded, setLoaded] = useState(false);
 
   return (
-    <div
-      className={`grid w-full min-h-0 ${
-        isLandscape
-          ? "grid-rows-[auto_auto] h-auto"
-          : "grid-rows-[1fr_auto] h-full"
-      }`}
-    >
-      {/* Zona imagen */}
+    <div className="grid grid-rows-[1fr_auto] w-full h-full min-h-0">
+      {/* Zona imagen con relación de aspecto fija */}
       <div
-        className={`relative w-full overflow-hidden flex items-center justify-center ${
-          isLandscape ? "h-auto" : "h-full min-h-0"
-        }`}
+        className={`relative w-full flex items-center justify-center overflow-hidden aspect-[${slide.width}/${slide.height}]`}
       >
-        {/* Placeholder blur-up */}
-        {slide.placeholder && (
-          <img
-            src={slide.placeholder}
-            alt=""
-            aria-hidden="true"
-            className={`absolute inset-0 w-full h-full object-contain blur-xl scale-105 transition-opacity duration-500 ${
-              loaded ? "opacity-0" : "opacity-100"
-            }`}
-          />
-        )}
+        {/* Placeholder blur (siempre visible al inicio) */}
+        <img
+          src={slide.placeholder}
+          alt=""
+          aria-hidden="true"
+          className={`absolute inset-0 w-full h-full object-contain blur-xl scale-105 transition-opacity duration-500 ${
+            loaded ? "opacity-0" : "opacity-100"
+          }`}
+        />
 
         {/* Imagen real */}
         <img
           src={slide.image}
           alt={slide.title}
-          className={`object-contain max-w-full max-h-full transition-opacity duration-500 ${
+          className={`object-contain w-full h-full transition-opacity duration-500 ${
             loaded ? "opacity-100" : "opacity-0"
           }`}
-          onLoad={(e) => {
-            setIsLandscape(
-              e.currentTarget.naturalWidth >= e.currentTarget.naturalHeight
-            );
-            setLoaded(true);
-          }}
+          onLoad={() => setLoaded(true)}
         />
       </div>
 
-      {/* Caption justo debajo */}
+      {/* Caption */}
       <div className="pt-2 text-center text-white shrink-0">
         <h2 className="text-base font-bold">{slide.title}</h2>
         <p className="text-xs font-light">{slide.subtitle}</p>

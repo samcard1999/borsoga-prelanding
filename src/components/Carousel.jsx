@@ -81,7 +81,7 @@ const SlideItem = ({ slide }) => {
         <img
           src={slide.image}
           alt={slide.title}
-          className="object-contain max-w-full max-h-full shadow-[0px_50px_30px_rgba(0,0,0,0.4)]"
+          className="object-contain max-w-full max-h-full "
           onLoad={(e) => {
             setIsLandscape(
               e.currentTarget.naturalWidth >= e.currentTarget.naturalHeight
@@ -104,13 +104,13 @@ const BlurBackgroundCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <div className="w-full h-full overflow-hidden py-8 bg-black text-white">
+    <div className="w-full h-fit overflow-hidden py-8 bg-black text-white">
       {/* Fondo difuminado con transición */}
-      <div className="absolute inset-0 -z-0">
+      {/* <div className="absolute inset-0 -z-0">
         {slides.map((slide, index) => (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity transition-all duration-500 ease-in-out`}
+            className={`absolute inset-0 transition-opacity duration-500 ease-in-out`}
             style={{
               backgroundImage: `url(${slide.image})`,
               backgroundSize: "cover",
@@ -120,7 +120,7 @@ const BlurBackgroundCarousel = () => {
             }}
           ></div>
         ))}
-      </div>
+      </div> */}
 
       {/* Carrusel con EffectCoverflow */}
       <Swiper

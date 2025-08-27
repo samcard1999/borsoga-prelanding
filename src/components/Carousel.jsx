@@ -49,6 +49,45 @@ const slides = [
   },
 ];
 
+const SlideItem = ({ slide }) => {
+  const [isLandscape, setIsLandscape] = React.useState(true);
+
+  return (
+    <div
+      className={`grid w-full min-h-0 ${
+        isLandscape
+          ? "grid-rows-[auto_auto] h-auto"
+          : "grid-rows-[1fr_auto]  h-full"
+      }`}
+    >
+      {/* Zona imagen */}
+      <div
+        className={`w-full overflow-hidden flex items-center justify-center ${
+          isLandscape ? "h-auto" : "h-full min-h-0"
+        }`}
+      >
+        <img
+          src={slide.image}
+          alt={slide.title}
+          className="object-contain max-w-full max-h-full shadow-[0px_50px_30px_rgba(0,0,0,0.4)]"
+          onLoad={(e) => {
+            setIsLandscape(
+              e.currentTarget.naturalWidth >= e.currentTarget.naturalHeight
+            );
+            console.log(isLandscape);
+          }}
+        />
+      </div>
+
+      {/* Caption justo debajo */}
+      <div className="pt-2 text-center text-white shrink-0">
+        <h2 className="text-base font-bold">{slide.title}</h2>
+        <p className="text-xs font-light">{slide.subtitle}</p>
+      </div>
+    </div>
+  );
+};
+
 const BlurBackgroundCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -91,22 +130,9 @@ const BlurBackgroundCarousel = () => {
         {slides.map((slide) => (
           <SwiperSlide
             key={slide.id}
-            className="max-w-[85%] h-full w-auto flex items-center justify-center"
+            className="h-full max-w-[85%] overflow-hidden !flex items-center justify-center"
           >
-            <div className="flex flex-col items-center justify-center h-full">
-              <div className="w-auto h-full">
-                <img
-                  src={slide.image}
-                  alt={slide.title}
-                  className=" object-contain h-full w-auto "
-                />
-              </div>
-
-              <div className="mt-2 text-center text-white">
-                <h2 className="text-base font-bold">{slide.title}</h2>
-                <p className=" text-xs font-light">{slide.subtitle}</p>
-              </div>
-            </div>
+            <SlideItem slide={slide} />
           </SwiperSlide>
         ))}
       </Swiper>

@@ -2,7 +2,7 @@ import React from "react";
 
 const Header = () => {
   return (
-    <header className="flex flex-col gap-2 items-start w-full">
+    <header className="z-40 flex flex-col px-4 gap-2 items-start w-full">
       <img
         src="assets/logo_full1.svg"
         alt="Borsoga Logo"

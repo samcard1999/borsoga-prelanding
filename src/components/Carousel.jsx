@@ -14,7 +14,6 @@ const slides = [
     image: "assets/carousel/1.webp",
     placeholder: placeholders["1.webp"].base64,
     area: "Visualization",
-    // sin bgImage -> usa image por defecto
   },
   {
     id: 3,
@@ -59,15 +58,26 @@ const slides = [
   },
   {
     id: 8,
-    title: "Epsi Nest",
+    type: "video",
+    title: "Peak Vision",
     subtitle: "Web Design",
+    video: "assets/carousel/peak-vision-video.mp4", // tu video
+    poster: "assets/carousel/peak-vision-back.webp", // poster del video (estático)
+    placeholder: placeholders["6.webp"]?.base64, // blur base64 del poster (opcional)
+    area: "Visualization",
+    bgImage: "assets/carousel/peak-vision-video-back.webp", // fondo personalizado (difuminado)
+  },
+  {
+    id: 9,
+    title: "Epsi Nest",
+    subtitle: "visual Identity",
     image: "assets/carousel/epsi.webp",
     placeholder: placeholders["7.webp"].base64,
     area: "Graphic Design",
     bgImage: "assets/carousel/epsi-back.webp",
   },
   {
-    id: 9,
+    id: 10,
     title: "Peak Vision",
     subtitle: "Visual Identity",
     image: "assets/carousel/6.webp",
@@ -76,14 +86,15 @@ const slides = [
     bgImage: "assets/carousel/peak-vision-back.webp",
   },
   {
-    id: 10,
+    id: 11,
     title: "",
     subtitle: "",
     image: "assets/shape.svg",
   },
 ];
 
-const SlideItem = ({ slide }) => {
+// ---------- Slide de Imagen ----------
+const ImageSlide = ({ slide }) => {
   const [isLandscape, setIsLandscape] = useState(true);
   const [loaded, setLoaded] = useState(false);
 
@@ -95,13 +106,11 @@ const SlideItem = ({ slide }) => {
           : "grid-rows-[1fr_auto] h-full"
       }`}
     >
-      {/* Zona imagen */}
       <div
         className={`relative w-full overflow-hidden flex items-center justify-center ${
           isLandscape ? "h-auto" : "h-full min-h-0"
         }`}
       >
-        {/* Placeholder blur-up */}
         {slide.placeholder && (
           <img
             src={slide.placeholder}
@@ -113,7 +122,6 @@ const SlideItem = ({ slide }) => {
           />
         )}
 
-        {/* Imagen real */}
         <img
           src={slide.image}
           alt={slide.title}
@@ -129,7 +137,6 @@ const SlideItem = ({ slide }) => {
         />
       </div>
 
-      {/* Caption */}
       <div className="pt-2 text-center text-white shrink-0">
         <h2 className="text-base font-bold">{slide.title}</h2>
         <p className="text-xs font-light">{slide.subtitle}</p>
@@ -138,13 +145,122 @@ const SlideItem = ({ slide }) => {
   );
 };
 
+// ---------- Slide de Video (lazy + autoplay) ----------
+const VideoSlide = ({ slide, isActive }) => {
+  const containerRef = useRef(null);
+  const videoRef = useRef(null);
+  const [loaded, setLoaded] = useState(false);
+  const [inView, setInView] = useState(false);
+  const [srcReady, setSrcReady] = useState(false); // cargamos src solo cuando entra en viewport
+  const [isLandscape, setIsLandscape] = useState(true);
+
+  // IntersectionObserver para lazy-load del video
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setInView(true);
+          else setInView(false);
+        });
+      },
+      { root: null, rootMargin: "200px", threshold: 0.1 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Asignar src cuando entre en vista
+  useEffect(() => {
+    if (inView && !srcReady) setSrcReady(true);
+  }, [inView, srcReady]);
+
+  // Play/pause según estado activo y listo
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (isActive && loaded) {
+      v.play().catch(() => {}); // algunos navegadores bloquean; muted ayuda
+    } else {
+      v.pause();
+    }
+  }, [isActive, loaded]);
+
+  return (
+    <div
+      ref={containerRef}
+      className={`grid w-full min-h-0 ${
+        isLandscape
+          ? "grid-rows-[auto_auto] h-auto"
+          : "grid-rows-[1fr_auto] h-full"
+      }`}
+    >
+      <div
+        className={`relative w-full overflow-hidden flex items-center justify-center ${
+          isLandscape ? "h-auto" : "h-full min-h-0"
+        }`}
+      >
+        {/* Placeholder/Poster en blur hasta que el video esté listo */}
+        {(slide.placeholder || slide.poster) && (
+          <img
+            src={slide.placeholder || slide.poster}
+            alt=""
+            aria-hidden="true"
+            className={`absolute inset-0 w-full h-full object-contain blur-xl scale-105 transition-opacity duration-500 ${
+              loaded ? "opacity-0" : "opacity-100"
+            }`}
+          />
+        )}
+
+        <video
+          ref={videoRef}
+          className={`object-contain max-w-full max-h-full transition-opacity duration-500 ${
+            loaded ? "opacity-100" : "opacity-0"
+          }`}
+          // autoplay config
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="none" // no descargues hasta que nosotros pongamos el src
+          poster={slide.poster}
+          onLoadedData={(e) => {
+            const v = e.currentTarget;
+            // detectar orientación real del video
+            const vw = v.videoWidth || 16;
+            const vh = v.videoHeight || 9;
+            setIsLandscape(vw >= vh);
+            setLoaded(true);
+          }}
+          // asignamos el src SOLO cuando está en viewport
+          src={srcReady ? slide.video : undefined}
+        />
+      </div>
+
+      <div className="pt-2 text-center text-white shrink-0">
+        <h2 className="text-base font-bold">{slide.title}</h2>
+        <p className="text-xs font-light">{slide.subtitle}</p>
+      </div>
+    </div>
+  );
+};
+
+// ---------- Item genérico que decide imagen o video ----------
+const SlideItem = ({ slide, isActive }) => {
+  if (slide.type === "video")
+    return <VideoSlide slide={slide} isActive={isActive} />;
+  return <ImageSlide slide={slide} />;
+};
+
 /**
  * Props:
- * - onAreaChange(area: string): notifica el área activa
- * - registerApi((api) => void): expone { goToArea(area), goToIndex(i) }
+ * - onAreaChange(area: string)
+ * - registerApi((api) => void) => { goToArea(area), goToIndex(i) }
  */
 const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
   const [swiper, setSwiper] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   // -------- Fondo difuminado con crossfade (performance-friendly) --------
   const layerARef = useRef(null);
@@ -154,10 +270,11 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
   const getBgUrl = (index) => {
     const s = slides[index];
     if (!s) return "";
-    return s.bgImage || s.image;
+    // En video: usa bgImage si existe; si no, usa poster; si no, usa image.
+    return s.bgImage || s.image || s.poster || "";
   };
 
-  // init: set primer fondo en A
+  // init fondo
   useEffect(() => {
     const a = layerARef.current;
     const b = layerBRef.current;
@@ -167,30 +284,23 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
     b.style.opacity = "0";
   }, []);
 
-  // función para cambiar fondo con crossfade entre A y B
   const crossfadeBg = (nextIdx) => {
     const a = layerARef.current;
     const b = layerBRef.current;
     if (!a || !b) return;
-
     const nextUrl = getBgUrl(nextIdx);
     if (!nextUrl) return;
 
     const showB = activeLayer.current === 0;
-    const top = showB ? b : a; // capa que entrará
-    const bottom = showB ? a : b; // capa que saldrá
+    const top = showB ? b : a;
+    const bottom = showB ? a : b;
 
-    // set siguiente imagen en la capa que entra
     top.style.backgroundImage = `url('${nextUrl}')`;
-
-    // forzamos reflow para asegurar transición
+    // forzar reflow
     // eslint-disable-next-line no-unused-expressions
     top.offsetHeight;
-
-    // fade
     top.style.opacity = "1";
     bottom.style.opacity = "0";
-
     activeLayer.current = showB ? 1 : 0;
   };
   // ----------------------------------------------------------------------
@@ -219,30 +329,26 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
 
   return (
     <div className="w-full h-full overflow-hidden py-8 bg-black text-white">
-      {/* Fondo difuminado con crossfade (2 capas + un solo blur aplicado al wrapper) */}
+      {/* Fondo difuminado con crossfade (2 capas + un solo blur) */}
       <div className="absolute inset-0 -z-0 overflow-hidden">
-        {/* wrapper con blur UNA sola vez (evita freezes) */}
         <div
           className="absolute inset-0 will-change-transform"
           style={{
-            filter: "blur(20px)", // blur único
-            transform: "translateZ(0)", // compositing
+            filter: "blur(18px)",
+            transform: "translateZ(0)",
           }}
         >
-          {/* Capa A */}
           <div
             ref={layerARef}
             className="absolute inset-0 bg-center bg-cover transition-opacity duration-500 ease-out"
             style={{ opacity: 0, willChange: "opacity" }}
           />
-          {/* Capa B */}
           <div
             ref={layerBRef}
             className="absolute inset-0 bg-center bg-cover transition-opacity duration-500 ease-out"
             style={{ opacity: 0, willChange: "opacity" }}
           />
         </div>
-        {/* oscurecido estable encima (barato) */}
         <div className="absolute inset-0 bg-black/45 pointer-events-none" />
       </div>
 
@@ -265,20 +371,19 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
         }}
         onSlideChange={(sw) => {
           const idx = sw.activeIndex;
-          // actualiza fondo
+          setActiveIndex(idx);
           crossfadeBg(idx);
-          // sync área
           const area = slides[idx]?.area || "Visualization";
           onAreaChange?.(area);
         }}
         className="mySwiper h-full w-full"
       >
-        {slides.map((slide) => (
+        {slides.map((slide, i) => (
           <SwiperSlide
             key={slide.id}
             className="h-full max-w-[85%] overflow-hidden !flex items-center justify-center"
           >
-            <SlideItem slide={slide} />
+            <SlideItem slide={slide} isActive={i === activeIndex} />
           </SwiperSlide>
         ))}
       </Swiper>

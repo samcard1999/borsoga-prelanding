@@ -129,7 +129,7 @@ const Header = ({ activeArea = "Visualization", onAreaSelect }) => {
             duration: 0.45,
             stagger: 0.08,
           },
-          "+=1.2" // solapar un poco con el final del logo
+          "+=0.5" // solapar un poco con el final del logo
         );
     }, headerRef);
 

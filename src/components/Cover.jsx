@@ -39,14 +39,14 @@ const Cover = () => {
       overlayRef.current,
       {
         opacity: 0,
-        duration: 0.6, // antes 1
+        duration: 0.3, // antes 1
         onComplete: () => {
           if (overlayRef.current) {
             gsap.set(overlayRef.current, { display: "none" });
           }
         },
       },
-      "+=1"
+      "+=0.2"
     );
   }, []);
 

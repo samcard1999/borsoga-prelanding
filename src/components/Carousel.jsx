@@ -102,7 +102,7 @@ const ImageSlide = ({ slide }) => {
     <div
       className={`w-full min-h-0 ${
         isLandscape
-          ? "grid grid-rows-[auto_auto] lg:h-full h-auto "
+          ? "flex flex-col justify-center items-center lg:h-full h-auto "
           : "flex flex-col justify-center items-center h-[80%]  lg:h-full"
       }`}
     >
@@ -125,7 +125,7 @@ const ImageSlide = ({ slide }) => {
         <img
           src={slide.image}
           alt={slide.title}
-          className={`object-contain max-w-full max-h-full transition-opacity duration-500 ${
+          className={`object-contain max-w-full h-full max-h-full transition-opacity duration-500 ${
             loaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={(e) => {
@@ -190,15 +190,15 @@ const VideoSlide = ({ slide, isActive }) => {
   return (
     <div
       ref={containerRef}
-      className={`grid w-full min-h-0 ${
+      className={`min-h-0 ${
         isLandscape
-          ? "grid-rows-[auto_auto] h-auto lg:h-full"
+          ? "flex h-full flex-col items-center justify-center lg:h-full"
           : "grid-rows-[1fr_auto] h-full"
       }`}
     >
       <div
         className={`relative w-full overflow-hidden flex items-center justify-center ${
-          isLandscape ? "h-auto" : "h-full min-h-0"
+          isLandscape ? "h-auto lg:h-full" : "h-full min-h-0"
         }`}
       >
         {/* Placeholder/Poster en blur hasta que el video esté listo */}

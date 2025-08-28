@@ -215,7 +215,7 @@ const VideoSlide = ({ slide, isActive }) => {
 
         <video
           ref={videoRef}
-          className={`object-contain max-w-full max-h-full transition-opacity duration-500 ${
+          className={`object-contain max-w-full max-h-full h-full transition-opacity duration-500 ${
             loaded ? "opacity-100" : "opacity-0"
           }`}
           // autoplay config
@@ -388,7 +388,7 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
           const area = slides[idx]?.area || "Visualization";
           onAreaChange?.(area);
         }}
-        className="mySwiper h-full w-full "
+        className="mySwiper h-full w-full"
       >
         {slides.map((slide, i) => (
           <SwiperSlide

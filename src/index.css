@@ -91,11 +91,13 @@ body {
 }
 
 .mySwiper .swiper-slide {
-  filter: brightness(40%) blur(3px); /* oscurece y desenfoca */
+  will-change: filter; /* le avisas al navegador que optimice */
+  filter: brightness(40%); /* oscurece y desenfoca */
   transition: all 200ms ease; /* transición suave */
 }
 
 .mySwiper .swiper-slide-active {
-  filter: brightness(100%) blur(0px); /* sin oscurecer ni blur */
+  will-change: filter; /* le avisas al navegador que optimice */
+  filter: brightness(100%); /* sin oscurecer ni blur */
   transition: all 200ms ease;
 }

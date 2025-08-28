@@ -70,7 +70,7 @@ const slides = [
   {
     id: 9,
     title: "Epsi Nest",
-    subtitle: "visual Identity",
+    subtitle: "Visual Identity",
     image: "assets/carousel/epsi.webp",
     placeholder: placeholders["7.webp"].base64,
     area: "Graphic Design",
@@ -100,15 +100,15 @@ const ImageSlide = ({ slide }) => {
 
   return (
     <div
-      className={`grid w-full min-h-0 ${
+      className={`w-full min-h-0 ${
         isLandscape
-          ? "grid-rows-[auto_auto] h-auto"
-          : "grid-rows-[1fr_auto] h-full"
+          ? "grid grid-rows-[auto_auto] lg:h-full h-auto "
+          : "flex flex-col justify-center items-center h-[80%]  lg:h-full"
       }`}
     >
       <div
         className={`relative w-full overflow-hidden flex items-center justify-center ${
-          isLandscape ? "h-auto" : "h-full min-h-0"
+          isLandscape ? "h-auto" : "h-auto lg:scale-100 min-h-0"
         }`}
       >
         {slide.placeholder && (
@@ -192,7 +192,7 @@ const VideoSlide = ({ slide, isActive }) => {
       ref={containerRef}
       className={`grid w-full min-h-0 ${
         isLandscape
-          ? "grid-rows-[auto_auto] h-auto"
+          ? "grid-rows-[auto_auto] h-auto lg:h-full"
           : "grid-rows-[1fr_auto] h-full"
       }`}
     >
@@ -328,7 +328,7 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
   }, [swiper, registerApi, firstIndexByArea]);
 
   return (
-    <div className="w-full h-full overflow-hidden py-8 bg-black text-white">
+    <div className="w-full h-full lg:h-4/5 overflow-hidden py-8 bg-black text-white">
       {/* Fondo difuminado con crossfade (2 capas + un solo blur) */}
       <div className="absolute inset-0 -z-0 overflow-hidden">
         <div
@@ -369,6 +369,18 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
           modifier: 1.3,
           slideShadows: false,
         }}
+        breakpoints={{
+          1024: {
+            // tablets / desktop
+            coverflowEffect: {
+              rotate: 0,
+              stretch: 650,
+              depth: 150,
+              modifier: 1.3,
+              slideShadows: false,
+            },
+          },
+        }}
         onSlideChange={(sw) => {
           const idx = sw.activeIndex;
           setActiveIndex(idx);
@@ -376,7 +388,7 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
           const area = slides[idx]?.area || "Visualization";
           onAreaChange?.(area);
         }}
-        className="mySwiper h-full w-full"
+        className="mySwiper h-full w-full "
       >
         {slides.map((slide, i) => (
           <SwiperSlide

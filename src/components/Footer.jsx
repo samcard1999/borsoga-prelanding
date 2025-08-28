@@ -85,7 +85,8 @@ const Footer = () => {
         >
           {/* Teléfono */}
           <a
-            href="tel:7868524847"
+            href="https://wa.me/17868524847"
+            target="_blank"
             className="flex items-center gap-3 hover:underline"
           >
             <img src="assets/phone.svg" alt="mail icon" className="w-5 h-5" />

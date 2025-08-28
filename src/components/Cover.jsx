@@ -7,7 +7,7 @@ const Cover = () => {
   const apiRef = useRef(null);
   const [activeArea, setActiveArea] = useState("Visualization");
   return (
-    <section className="relative w-full h-screen  py-14 flex flex-col items-start justify-between">
+    <section className="relative w-full h-screen  py-14 lg:pt-8 lg:pb-4 flex flex-col items-start justify-between">
       <Header
         activeArea={activeArea}
         onAreaSelect={(area) => apiRef.current?.goToArea(area)}

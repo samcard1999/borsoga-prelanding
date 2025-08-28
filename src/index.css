@@ -91,11 +91,11 @@ body {
 }
 
 .mySwiper .swiper-slide {
-  opacity: 0.28;
-  transition: opacity 900ms ease;
+  filter: brightness(40%) blur(3px); /* oscurece y desenfoca */
+  transition: all 200ms ease; /* transición suave */
 }
 
 .mySwiper .swiper-slide-active {
-  opacity: 1;
-  transition: opacity 900ms ease;
+  filter: brightness(100%) blur(0px); /* sin oscurecer ni blur */
+  transition: all 200ms ease;
 }

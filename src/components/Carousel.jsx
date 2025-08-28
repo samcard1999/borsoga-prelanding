@@ -64,7 +64,7 @@ const slides = [
     video: "assets/carousel/peak-vision-video.mp4", // tu video
     poster: "assets/carousel/peak-vision-back.webp", // poster del video (estático)
     placeholder: placeholders["6.webp"]?.base64, // blur base64 del poster (opcional)
-    area: "Visualization",
+    area: "Programming",
     bgImage: "assets/carousel/peak-vision-video-back.webp", // fondo personalizado (difuminado)
   },
   {
@@ -340,12 +340,12 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
         >
           <div
             ref={layerARef}
-            className="absolute inset-0 bg-center bg-cover transition-opacity duration-500 ease-out"
+            className="absolute inset-0 bg-center bg-cover transition-opacity duration-1000 ease-out"
             style={{ opacity: 0, willChange: "opacity" }}
           />
           <div
             ref={layerBRef}
-            className="absolute inset-0 bg-center bg-cover transition-opacity duration-500 ease-out"
+            className="absolute inset-0 bg-center bg-cover transition-opacity duration-1000 ease-out"
             style={{ opacity: 0, willChange: "opacity" }}
           />
         </div>

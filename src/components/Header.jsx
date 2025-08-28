@@ -141,7 +141,7 @@ const Header = ({ activeArea = "Visualization", onAreaSelect }) => {
                     className={`w-full transition-opacity duration-300 ease-in-out m-0
                       ${
                         isActive
-                          ? "opacity-100 font-semibold text-white"
+                          ? "opacity-100 font-bold text-white"
                           : "opacity-70 hover:opacity-100"
                       }
                     `}

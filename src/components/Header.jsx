@@ -177,7 +177,7 @@ const Header = ({ activeArea = "Visualization", onAreaSelect }) => {
                   aria-pressed={isActive}
                 >
                   <h2
-                    className={`w-full transition-opacity duration-300 ease-in-out m-0
+                    className={`selected-area w-full transition-opacity duration-300 ease-in-out m-0
                       ${
                         isActive
                           ? "opacity-100 font-bold text-white"

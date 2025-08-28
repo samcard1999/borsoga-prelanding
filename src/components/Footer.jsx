@@ -122,6 +122,7 @@ const Footer = () => {
         className="border-t border-white flex justify-between items-end w-full py-2"
       >
         <button
+          id="contact-accordion-trigger"
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}

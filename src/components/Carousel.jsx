@@ -1,6 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Mousewheel, Keyboard } from "swiper/modules";
+import {
+  EffectCoverflow,
+  Mousewheel,
+  Keyboard,
+  Autoplay,
+} from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/effect-coverflow";
@@ -89,6 +94,7 @@ const slides = [
     id: 11,
     title: "",
     subtitle: "",
+    area: "Graphic Design",
     image: "assets/shape.svg",
   },
 ];
@@ -262,6 +268,56 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
   const [swiper, setSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // Dentro de tu componente (arriba, junto a otros refs/estado)
+  const wasLastRef = useRef(false);
+
+  const clickContactTrigger = () => {
+    const btn = document.getElementById("contact-accordion-trigger");
+    if (btn) btn.click();
+  };
+
+  const unselectedAreaTrigger = () => {
+    document.querySelectorAll(".selected-area").forEach((el) => {
+      el.classList.remove("font-normal", "opacity-70");
+    });
+  };
+
+  const selectedAreaTrigger = () => {
+    document.querySelectorAll(".selected-area").forEach((el) => {
+      el.classList.add("font-normal", "opacity-70");
+    });
+  };
+
+  const handleLastBoundary = (sw, triggerOnMount = false) => {
+    if (!sw) return;
+
+    // Si usas loop, compara con realIndex; si no, con activeIndex.
+    const isLast = sw?.params?.loop
+      ? sw.realIndex === slides.length - 1
+      : sw.activeIndex === sw.slides?.length - 1;
+
+    // Chequeo inicial (por si se monta ya en la última)
+    if (triggerOnMount) {
+      if (isLast) {
+        clickContactTrigger(); // abrir/cerrar acordeón según tu lógica (toggle)
+        selectedAreaTrigger(); // ✅ aplica clases en la última
+      } else {
+        unselectedAreaTrigger(); // ✅ quita clases si no estás en la última
+      }
+    }
+
+    // En cambios de slide: cuando cruzas el límite última <-> no-última
+    if (!triggerOnMount && isLast !== wasLastRef.current) {
+      clickContactTrigger(); // toggle acordeón
+      if (isLast) {
+        selectedAreaTrigger(); // ✅ entras a la última -> aplica clases
+      } else {
+        unselectedAreaTrigger(); // ✅ sales de la última -> quita clases
+      }
+    }
+
+    wasLastRef.current = isLast;
+  };
   // -------- Fondo difuminado con crossfade (performance-friendly) --------
   const layerARef = useRef(null);
   const layerBRef = useRef(null);
@@ -353,8 +409,15 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
       </div>
 
       <Swiper
-        modules={[EffectCoverflow, Mousewheel, Keyboard]}
-        onSwiper={setSwiper}
+        modules={[EffectCoverflow, Mousewheel, Keyboard, Autoplay]}
+        onSwiper={(sw) => {
+          setSwiper(sw);
+          handleLastBoundary(sw, true); // chequeo inicial (por si arrancas en la última)
+        }}
+        onSlideChangeTransitionEnd={(sw) => {
+          console.log("ola");
+          handleLastBoundary(sw); // clic al entrar/salir de la última
+        }}
         effect="coverflow"
         grabCursor
         centeredSlides
@@ -362,6 +425,11 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
         speed={500}
         mousewheel
         keyboard={{ enabled: true, onlyInViewport: true, pageUpDown: true }}
+        autoplay={{
+          delay: 4000, // tiempo entre slides en ms
+          disableOnInteraction: false, // si el usuario interactúa, sigue el autoplay
+          stopOnLastSlide: true,
+        }}
         coverflowEffect={{
           rotate: 0,
           stretch: 50,
@@ -382,6 +450,8 @@ const BlurBackgroundCarousel = ({ onAreaChange, registerApi }) => {
           },
         }}
         onSlideChange={(sw) => {
+          const isLast = sw.activeIndex === sw.slides.length - 1;
+          sw.el.classList.toggle("is-last", isLast);
           const idx = sw.activeIndex;
           setActiveIndex(idx);
           crossfadeBg(idx);

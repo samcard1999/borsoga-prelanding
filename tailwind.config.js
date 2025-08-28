@@ -13,6 +13,9 @@ export default {
         white: '#ffffff',
         black: '#000000',
       },
+      borderWidth: {
+        DEFAULT: '0.5px', // <- ahora border y border-t/-b/-l/-r serán de 1.5px
+      },
     },
   },
   plugins: [],

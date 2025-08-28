@@ -83,6 +83,19 @@ const Footer = () => {
           ref={contentRef}
           className="pt-2 pb-4 flex flex-col items-center justify-center font-light gap-2"
         >
+          {/* Instagram */}
+          <a
+            href="https://www.instagram.com/borsogastudio/"
+            target="_blank"
+            className="flex items-center gap-3 hover:underline"
+          >
+            <img
+              src="assets/instagram.svg"
+              alt="instagram icon"
+              className="w-5 h-5"
+            />
+            Instagram
+          </a>
           {/* Teléfono */}
           <a
             href="https://wa.me/17868524847"

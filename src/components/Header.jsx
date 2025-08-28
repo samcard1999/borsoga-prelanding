@@ -11,8 +11,10 @@ import { gsap } from "gsap";
 const AREAS = ["Visualization", "Programming", "Graphic Design"];
 
 const Header = ({ activeArea = "Visualization", onAreaSelect }) => {
+  const headerRef = useRef(null);
   const viewRef = useRef(null);
   const trackRef = useRef(null);
+  const logoRef = useRef(null);
   const [cellW, setCellW] = useState(0);
 
   const REPEATS = 7;
@@ -101,9 +103,46 @@ const Header = ({ activeArea = "Visualization", onAreaSelect }) => {
     onAreaSelect?.(area);
   };
 
+  // 🎬 Animación de entrada (logo + labels)
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      const labels = trackRef.current
+        ? trackRef.current.querySelectorAll("h2")
+        : [];
+
+      // estados iniciales
+      gsap.set(logoRef.current, { y: -20, autoAlpha: 0 });
+      labels.length && gsap.set(labels, { y: 16, autoAlpha: 0 });
+
+      // logo
+      tl.to(logoRef.current, { y: 0, autoAlpha: 1, duration: 0.6 });
+
+      // labels en secuencia
+      labels.length &&
+        tl.to(
+          labels,
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.45,
+            stagger: 0.08,
+          },
+          "+=1.2" // solapar un poco con el final del logo
+        );
+    }, headerRef);
+
+    return () => ctx.revert(); // limpieza segura
+  }, []);
+
   return (
-    <header className="z-40 flex flex-col px-4 gap-2 items-start w-full text-white">
+    <header
+      ref={headerRef}
+      className="z-40 flex flex-col px-4 gap-2 items-start w-full text-white"
+    >
       <img
+        ref={logoRef}
         src="assets/logo_full1.svg"
         alt="Borsoga Logo"
         className="h-auto w-64"
